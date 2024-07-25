@@ -579,75 +579,6 @@ dados = dados |>
   ))
 
 
-####### teste rfe - seleção de variáveis
-
-
-library("dplyr")
-#install.packages("faux")
-library("faux")
-#install.packages("DataExplorer")
-library("DataExplorer")
-library("caret")
-library("randomForest")
-
-
-
-# Definindo o control para utilizar na função rfe
-# Utilizando novamente o randomForest
-control <- rfeControl(functions = rfFuncs, # random forest
-                      method = "repeatedcv", # repeated cv
-                      repeats = 3, # number of repeats
-                      number = 10) # number of folds
-
-
-# Dividindo as bases em treino e teste
-x <- dados %>%
-  dplyr::select(-resultado) |> 
-  as.data.frame()
-
-# Target variable
-y <- dados$resultado
-
-# Training: 80%; Test: 20%
-set.seed(2021)
-
-
-x_train <- x[ 41:570, ]
-x_test  <- x[571:760, ]
-
-y_train <- y[ 41:570]
-y_test  <- y[571:760]
-
-dim(dados)
-dim(x_train)
-length(y_train)
-
-# Run RFE
-result_rfe1 <- rfe(x = x_train, 
-                   y = y_train, 
-                   sizes = c(20:70),
-                   rfeControl = control)
-
-
-
-# Print the results
-result_rfe1
-
-#row.names(varImp(result_rfe1))[1:10]
-
-# Print the selected features
-predictors(result_rfe1)
-
-# Print the results visually
-ggplot(data = result_rfe1, metric = "Accuracy") + theme_bw()+
-  labs(x = "Número de Variáveis",
-       y = "Acurácia",
-       title = "Resultado do RFE")
-ggplot(data = result_rfe1, metric = "Kappa") + theme_bw()
-
-# OBS: as variáveis indicadas pelo RFE foram as que obtiveram os melhores
-# resultados nas previsões
-
 
 
 
@@ -942,6 +873,84 @@ prop.table(table(dados2_treino$resultado))
 # tab1(dado_total$resultado, main = "VariÃ¡vel alvo nos dados de treino depois")
 # 
 # 
+
+
+
+
+
+
+####### teste rfe - seleção de variáveis
+
+
+library("dplyr")
+#install.packages("faux")
+library("faux")
+#install.packages("DataExplorer")
+library("DataExplorer")
+library("caret")
+library("randomForest")
+
+
+
+# Definindo o control para utilizar na função rfe
+# Utilizando novamente o randomForest
+control <- rfeControl(functions = rfFuncs, # random forest
+                      method = "repeatedcv", # repeated cv
+                      repeats = 3, # number of repeats
+                      number = 10) # number of folds
+
+
+# Dividindo as bases em treino e teste
+x <- dados %>%
+  dplyr::select(-resultado) |> 
+  as.data.frame()
+
+# Target variable
+y <- dados$resultado
+
+# Training: 80%; Test: 20%
+set.seed(2021)
+
+
+x_train <- x[ 41:570, ]
+x_test  <- x[571:760, ]
+
+y_train <- y[ 41:570]
+y_test  <- y[571:760]
+
+dim(dados)
+dim(x_train)
+length(y_train)
+
+# Run RFE
+result_rfe1 <- rfe(x = x_train, 
+                   y = y_train, 
+                   sizes = c(20:70),
+                   rfeControl = control)
+
+
+
+# Print the results
+result_rfe1
+
+#row.names(varImp(result_rfe1))[1:10]
+
+# Print the selected features
+predictors(result_rfe1)
+
+# Print the results visually
+ggplot(data = result_rfe1, metric = "Accuracy") + theme_bw()+
+  labs(x = "Número de Variáveis",
+       y = "Acurácia",
+       title = "Resultado do RFE")
+ggplot(data = result_rfe1, metric = "Kappa") + theme_bw()
+
+# OBS: as variáveis indicadas pelo RFE foram as que obtiveram os melhores
+# resultados nas previsões
+
+
+
+
 
 
 
