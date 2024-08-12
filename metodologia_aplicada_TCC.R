@@ -1084,8 +1084,8 @@ numWts <- 1*(maxSize * (length(dados2_treino) + 1) + maxSize + 1)
 
 
 set.seed(1000)
-grid_nnet = expand.grid(size = 1,
-                          decay = seq(0.04,0.50,0.02)
+grid_nnet = expand.grid(size = c(1,3),
+                          decay = seq(0.04,0.50,0.02),
                           #bag = FALSE
 )
 
